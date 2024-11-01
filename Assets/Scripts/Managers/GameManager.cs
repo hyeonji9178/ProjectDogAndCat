@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour //게임매니저
 {
     public GameObject introScreen;  // 인트로 화면
     public Button startButton;       // 시작 버튼
