@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour //게임매니저
     public TextMeshProUGUI moneyText;           // 돈 표시 텍스트
     public TextMeshProUGUI levelText;           // 레벨 표시 텍스트
     public TextMeshProUGUI levelUpButtonPrice;   // 레벨업 가격 텍스트
+
+    public EnemySpawner enemySpawner; // EnemySpawner 참조
+
     public int Money { get; private set; } = 0; // 초기 돈을 public으로 설정
     public int money = 0;           // 초기 돈
     public int level = 1;           // 초기 레벨
@@ -34,6 +37,16 @@ public class GameManager : MonoBehaviour //게임매니저
     {
         // 인트로 화면 비활성화
         introScreen.SetActive(false);
+
+        // 적 스폰 시작
+        if (enemySpawner != null)
+        {
+            enemySpawner.StartSpawning(); // 적 스폰 시작
+        }
+        else
+        {
+            Debug.LogError("EnemySpawner is not assigned in the GameManager.");
+        }
 
         // 돈 증가 코루틴 시작
         StartCoroutine(IncreaseMoney());
