@@ -5,13 +5,13 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float moveSpeed; // 이동 속도
-    public float attackSpeed; // 공격 속도
+    public int attackSpeed; // 공격 속도
     public float attackRange; // 공격 범위
-    public float attackPower; // 공격력
-    public float health; // 체력
+    public int attackPower; // 공격력
+    public int health; // 체력
 
-    private Vector3 spawnPosition; // 스폰 위치
-    private float targetX; // 목표 x 위치
+    public Vector3 spawnPosition; // 스폰 위치
+    public float targetX; // 목표 x 위치
 
     public void Initialize(Vector3 spawnPos)
     {

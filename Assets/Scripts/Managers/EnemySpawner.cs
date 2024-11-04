@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -8,24 +7,19 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemyPrefab2; // 두 번째 적 프리팹
     public GameObject enemyPrefab3; // 세 번째 적 프리팹
 
-    public Vector2 spawnXRange = new Vector2(-50, -50); // x축 고정 범위
-    public Vector2 spawnYRange = new Vector2(0, -20); // y축 랜덤 범위
-
     public void StartSpawning()
     {
-        // 첫 번째 적: 즉시 스폰, 이후 7초 간격으로 스폰
-        SpawnEnemy(enemyPrefab1); // 시작하자마자 첫 스폰
-        StartCoroutine(SpawnEnemyCoroutine(enemyPrefab1, 7f));
-
-        // 두 번째 적: 1분 후 첫 생성, 이후 10초 간격으로 스폰
-        StartCoroutine(DelayedSpawn(enemyPrefab2, 60f, 10f));
-
-        // 세 번째 적: 2분 후 첫 생성, 이후 30초 간격으로 스폰
-        StartCoroutine(DelayedSpawn(enemyPrefab3, 120f, 30f));
+        StartCoroutine(SpawnEnemyCoroutine(enemyPrefab1, 7f)); // 첫 번째 적을 즉시 스폰하고 7초마다 계속 스폰
+        StartCoroutine(SpawnSecondEnemy()); // 두 번째 적 스폰 코루틴 시작
+        StartCoroutine(SpawnThirdEnemy()); // 세 번째 적 스폰 코루틴 시작
     }
 
     private IEnumerator SpawnEnemyCoroutine(GameObject enemyPrefab, float interval)
     {
+        // 첫 번째 적 즉시 스폰
+        SpawnEnemy(enemyPrefab);
+
+        // 이후 7초 간격으로 계속 스폰
         while (true)
         {
             yield return new WaitForSeconds(interval);
@@ -33,27 +27,31 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private IEnumerator DelayedSpawn(GameObject enemyPrefab, float initialDelay, float interval)
+    private IEnumerator SpawnSecondEnemy()
     {
-        yield return new WaitForSeconds(initialDelay); // 첫 생성 대기 시간
-        SpawnEnemy(enemyPrefab); // 첫 스폰
-
-        // 이후 일정 간격으로 반복 생성
+        yield return new WaitForSeconds(60f); // 1분 대기
         while (true)
         {
-            yield return new WaitForSeconds(interval);
-            SpawnEnemy(enemyPrefab);
+            SpawnEnemy(enemyPrefab2);
+            yield return new WaitForSeconds(10f); // 10초 간격으로 두 번째 적 스폰
+        }
+    }
+
+    private IEnumerator SpawnThirdEnemy()
+    {
+        yield return new WaitForSeconds(120f); // 2분 대기
+        while (true)
+        {
+            SpawnEnemy(enemyPrefab3);
+            yield return new WaitForSeconds(30f); // 30초 간격으로 세 번째 적 스폰
         }
     }
 
     private void SpawnEnemy(GameObject enemyPrefab)
     {
-        Vector3 spawnPos = new Vector3(
-            Random.Range(spawnXRange.x, spawnXRange.y),
-            Random.Range(spawnYRange.x, spawnYRange.y),
-            0);
+        Vector3 spawnPos = new Vector3(-50, Random.Range(0, -20), 0); // X = -50, Y = 0에서 -20까지
 
         GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-        enemy.GetComponent<Enemy>().Initialize(spawnPos); // 적의 초기화 호출
+        enemy.GetComponent<Enemy>().Initialize(spawnPos);
     }
 }
