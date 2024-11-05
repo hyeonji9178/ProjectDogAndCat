@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public int Money { get; private set; } = 0;
     public int money = 0;
     public int level = 1;
-    public int moneyPerSecond = 6;  // ÃÊ±â ÃÊ´ç ¹ú¾îµéÀÌ´Â µ·
+    public int moneyPerSecond = 6;  // ì´ˆê¸° ì´ˆë‹¹ ë²Œì–´ë“¤ì´ëŠ” ëˆ
     public int maxMoney = 100;
     public int levelUpCost = 40;
 
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         {
             money -= levelUpCost;
             level++;
-            moneyPerSecond += 4;  // ·¹º§¾÷ ½Ã 4¿ø Áõ°¡
+            moneyPerSecond += 4;  // ë ˆë²¨ì—… ì‹œ 4ì› ì¦ê°€
             maxMoney += 50;
             levelUpCost += 40;
 
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateMoneyText()
     {
-        moneyText.text = $"{money}/{maxMoney} ¿ø";
+        moneyText.text = $"{money}/{maxMoney} ì›";
     }
 
     void UpdateLevelText()
@@ -90,6 +90,6 @@ public class GameManager : MonoBehaviour
 
     void UpdateLevelUpButtonText()
     {
-        levelUpButtonPrice.text = level >= 7 ? "MAX LEVEL" : $"{levelUpCost} ¿ø";
+        levelUpButtonPrice.text = level >= 7 ? "MAX LEVEL" : $"{levelUpCost} ì›";
     }
 }
