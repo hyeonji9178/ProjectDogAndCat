@@ -3,46 +3,50 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy Prefabs")]
-    public GameObject enemy1Prefab;  // 첫 번째 적
-    public GameObject enemy2Prefab;  // 두 번째 적
-    public GameObject enemy3Prefab;  // 세 번째 적
+    public GameObject enemy1Prefab;
+    public GameObject enemy2Prefab;
+    public GameObject enemy3Prefab;
 
     [Header("Spawn Settings")]
-    public float spawnY = -10f;      // 스폰 Y 위치
+    public float spawnY = -10f;
+    public float spawnX = -50f;  // 왼쪽에서 스폰하도록 X 위치 추가
 
     [Header("Enemy 1 Settings")]
-    public float enemy1FirstDelay = 0f;   // 게임 시작과 동시에
-    public float enemy1Interval = 7f;     // 7초마다
+    public float enemy1FirstDelay = 0f;
+    public float enemy1Interval = 7f;
 
     [Header("Enemy 2 Settings")]
-    public float enemy2FirstDelay = 60f;  // 1분 후 시작
-    public float enemy2Interval = 10f;    // 10초마다
+    public float enemy2FirstDelay = 60f;
+    public float enemy2Interval = 10f;
 
     [Header("Enemy 3 Settings")]
-    public float enemy3FirstDelay = 120f; // 2분 후 시작
-    public float enemy3Interval = 30f;    // 30초마다
+    public float enemy3FirstDelay = 120f;
+    public float enemy3Interval = 30f;
 
     private bool isSpawning = false;
-
-    void Start()
-    {
-        // 시작할 때는 자동으로 시작하지 않음
-    }
 
     public void StartSpawning()
     {
         if (!isSpawning)
         {
+            Debug.Log("적 스폰 시작!"); // 디버그 로그 추가
             isSpawning = true;
 
-            // 첫 번째 적 스폰 시작
-            InvokeRepeating("SpawnEnemy1", enemy1FirstDelay, enemy1Interval);
+            // 각 적 타입별 스폰 시작
+            if (enemy1Prefab != null)
+            {
+                InvokeRepeating("SpawnEnemy1", enemy1FirstDelay, enemy1Interval);
+            }
 
-            // 두 번째 적 스폰 시작
-            InvokeRepeating("SpawnEnemy2", enemy2FirstDelay, enemy2Interval);
+            if (enemy2Prefab != null)
+            {
+                InvokeRepeating("SpawnEnemy2", enemy2FirstDelay, enemy2Interval);
+            }
 
-            // 세 번째 적 스폰 시작
-            InvokeRepeating("SpawnEnemy3", enemy3FirstDelay, enemy3Interval);
+            if (enemy3Prefab != null)
+            {
+                InvokeRepeating("SpawnEnemy3", enemy3FirstDelay, enemy3Interval);
+            }
         }
     }
 
@@ -51,27 +55,40 @@ public class EnemySpawner : MonoBehaviour
         if (isSpawning)
         {
             isSpawning = false;
-            CancelInvoke("SpawnEnemy1");
-            CancelInvoke("SpawnEnemy2");
-            CancelInvoke("SpawnEnemy3");
+            CancelInvoke();
         }
     }
 
     void SpawnEnemy1()
     {
-        Vector3 spawnPosition = new Vector3(transform.position.x, spawnY, 0);
-        Instantiate(enemy1Prefab, spawnPosition, Quaternion.identity);
+        float randomY = Random.Range(-20f, 0f);  // Y 위치 랜덤화
+        Vector3 spawnPosition = new Vector3(spawnX, randomY, 0);
+        if (enemy1Prefab != null)
+        {
+            Instantiate(enemy1Prefab, spawnPosition, Quaternion.identity);
+            Debug.Log("Enemy1 스폰됨!"); // 디버그 로그 추가
+        }
     }
 
     void SpawnEnemy2()
     {
-        Vector3 spawnPosition = new Vector3(transform.position.x, spawnY, 0);
-        Instantiate(enemy2Prefab, spawnPosition, Quaternion.identity);
+        float randomY = Random.Range(-20f, 0f);
+        Vector3 spawnPosition = new Vector3(spawnX, randomY, 0);
+        if (enemy2Prefab != null)
+        {
+            Instantiate(enemy2Prefab, spawnPosition, Quaternion.identity);
+            Debug.Log("Enemy2 스폰됨!");
+        }
     }
 
     void SpawnEnemy3()
     {
-        Vector3 spawnPosition = new Vector3(transform.position.x, spawnY, 0);
-        Instantiate(enemy3Prefab, spawnPosition, Quaternion.identity);
+        float randomY = Random.Range(-20f, 0f);
+        Vector3 spawnPosition = new Vector3(spawnX, randomY, 0);
+        if (enemy3Prefab != null)
+        {
+            Instantiate(enemy3Prefab, spawnPosition, Quaternion.identity);
+            Debug.Log("Enemy3 스폰됨!");
+        }
     }
 }

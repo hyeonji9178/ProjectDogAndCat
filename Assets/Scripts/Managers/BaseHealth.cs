@@ -1,22 +1,18 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 public class BaseHealth : MonoBehaviour
 {
     public int maxHealth = 1000;
     public int currentHealth;
-    public Slider healthSlider;
+    public TextMeshProUGUI healthText;  // Slider 대신 TextMeshProUGUI 사용
     public GameObject gameOverUI;
 
     void Start()
     {
         currentHealth = maxHealth;
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
-        }
+        UpdateHealthText();
         if (gameOverUI != null)
         {
             gameOverUI.SetActive(false);
@@ -26,15 +22,19 @@ public class BaseHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        
-        if (healthSlider != null)
-        {
-            healthSlider.value = currentHealth;
-        }
+        UpdateHealthText();
 
         if (currentHealth <= 0)
         {
             GameOver();
+        }
+    }
+
+    void UpdateHealthText()
+    {
+        if (healthText != null)
+        {
+            healthText.text = $"HP: {currentHealth}/{maxHealth}";
         }
     }
 

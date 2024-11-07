@@ -14,8 +14,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI levelUpButtonPrice;
     public EnemySpawner enemySpawner;
 
-    public int Money { get; private set; } = 0;
-    public int money = 0;
+    public int money = 0;  // 시작 금액 0으로 수정
     public int level = 1;
     public int moneyPerSecond = 6;  // 초기 초당 벌어들이는 돈
     public int maxMoney = 100;
@@ -80,16 +79,25 @@ public class GameManager : MonoBehaviour
 
     void UpdateMoneyText()
     {
-        moneyText.text = $"{money}/{maxMoney} 원";
+        if (moneyText != null)
+        {
+            moneyText.text = $"{money}/{maxMoney} 원";
+        }
     }
 
     void UpdateLevelText()
     {
-        levelText.text = $"LV. {level}";
+        if (levelText != null)
+        {
+            levelText.text = $"LV. {level}";
+        }
     }
 
     void UpdateLevelUpButtonText()
     {
-        levelUpButtonPrice.text = level >= 7 ? "MAX LEVEL" : $"{levelUpCost} 원";
+        if (levelUpButtonPrice != null)
+        {
+            levelUpButtonPrice.text = level >= 7 ? "MAX LEVEL" : $"{levelUpCost} 원";
+        }
     }
 }

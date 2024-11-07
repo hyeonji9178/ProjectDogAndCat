@@ -122,37 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &39323453
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 39323454}
-  m_Layer: 0
-  m_Name: Player
-  m_TagString: PlayerUnit
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &39323454
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 39323453}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1236.2983, y: 744.301, z: -10.141102}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &97974521
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,8 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e132f984b4a88fa4eadbc06cb7917262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownImage: {fileID: 867066398}
   cooldownTime: 10
+  cooldownImage: {fileID: 867066398}
+  cooldownUI: {fileID: 0}
 --- !u!1 &117490854
 GameObject:
   m_ObjectHideFlags: 0
@@ -2418,8 +2388,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e132f984b4a88fa4eadbc06cb7917262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownImage: {fileID: 1131745313}
   cooldownTime: 50
+  cooldownImage: {fileID: 1131745313}
+  cooldownUI: {fileID: 0}
 --- !u!224 &739105187
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3540,9 +3511,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b1196ccf2b790469455fdbb9bcec99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 0}
-  enemy2Prefab: {fileID: 0}
-  enemy3Prefab: {fileID: 0}
+  enemy1Prefab: {fileID: 8651937694295256500, guid: d16a7d067189c844fb2aa1e88139bd10, type: 3}
+  enemy2Prefab: {fileID: 8651937694295256500, guid: f769b1b2a61651d429a4a3d5eb66b87b, type: 3}
+  enemy3Prefab: {fileID: 8651937694295256500, guid: c90f06ea72b462c4fa2b450230ab6f81, type: 3}
   spawnY: -10
   enemy1FirstDelay: 0
   enemy1Interval: 7
@@ -3958,8 +3929,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e132f984b4a88fa4eadbc06cb7917262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownImage: {fileID: 921723444}
   cooldownTime: 5
+  cooldownImage: {fileID: 921723444}
+  cooldownUI: {fileID: 0}
 --- !u!1 &1197780676
 GameObject:
   m_ObjectHideFlags: 0
@@ -5060,23 +5032,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 116548782685991467, guid: 5217648bfd5c9654d9f022dd94521083, type: 3}
+  - {fileID: 116548782685991467, guid: fc88505f268de484394c0f870430ccf3, type: 3}
+  - {fileID: 116548782685991467, guid: 80d843a0eb6017c42b86616eab8bbc14, type: 3}
+  - {fileID: 116548782685991467, guid: 3772e736fb0209f4eb9d5240be5fc24b, type: 3}
+  - {fileID: 116548782685991467, guid: e35529a8686415440be17f65edf6e732, type: 3}
   spawnButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1806998212}
+  - {fileID: 1638630656}
+  - {fileID: 1820474269}
+  - {fileID: 321663026}
+  - {fileID: 1485555229}
   spawnCooldowns:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1196747061}
+  - {fileID: 97974523}
+  - {fileID: 1932501530}
+  - {fileID: 1673484852}
+  - {fileID: 739105186}
 --- !u!1 &1595491498
 GameObject:
   m_ObjectHideFlags: 0
@@ -5404,37 +5376,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638630654}
   m_CullTransparentMesh: 1
---- !u!1 &1645699079
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1645699080}
-  m_Layer: 0
-  m_Name: Enemys
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1645699080
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1645699079}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1405.0392, y: 676.69305, z: -10.506197}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647166279
 GameObject:
   m_ObjectHideFlags: 0
@@ -5558,8 +5499,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e132f984b4a88fa4eadbc06cb7917262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownImage: {fileID: 578859475}
   cooldownTime: 30
+  cooldownImage: {fileID: 578859475}
+  cooldownUI: {fileID: 0}
 --- !u!1 &1678379845
 GameObject:
   m_ObjectHideFlags: 0
@@ -5715,7 +5657,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1706301343
 RectTransform:
@@ -7480,8 +7422,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e132f984b4a88fa4eadbc06cb7917262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownImage: {fileID: 729550362}
   cooldownTime: 20
+  cooldownImage: {fileID: 729550362}
+  cooldownUI: {fileID: 0}
 --- !u!1 &1949635754
 GameObject:
   m_ObjectHideFlags: 0
@@ -8109,7 +8052,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &2129758938
 GameObject:
@@ -8289,8 +8232,6 @@ SceneRoots:
   - {fileID: 777035329}
   - {fileID: 2015750058}
   - {fileID: 1726993625}
-  - {fileID: 1645699080}
-  - {fileID: 39323454}
   - {fileID: 1806109543}
   - {fileID: 567213962}
   - {fileID: 1199748230}

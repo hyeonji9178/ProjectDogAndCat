@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour
     public float moveSpeed = 5f;
     public int maxHealth = 100;
     public bool isEnemy;
+    public int cost = 100;    // 생산 비용
 
     [Header("Attack Stats")]
     public int attackPower = 10;
@@ -22,6 +23,10 @@ public class Unit : MonoBehaviour
     [Header("Target Layers")]
     public LayerMask targetLayers;     // 공격 가능한 레이어
 
+    // 기지 위치 상수
+    private const float RIGHT_BASE_X = 50f;
+    private const float LEFT_BASE_X = -50f;
+
     protected virtual void Start()
     {
         currentHealth = maxHealth;
@@ -32,126 +37,134 @@ public class Unit : MonoBehaviour
     {
         transform.position = spawnPos;
         currentHealth = maxHealth;
+        lastAttackTime = 0f;
     }
 
     void Update()
     {
-        if (currentTarget == null)
+        // 1. 먼저 타겟 찾기
+        FindTarget();
+
+        // 2. 타겟이 있고 공격 범위 안에 있으면 공격
+        if (currentTarget != null)
         {
-            Move();
-            FindTarget(); // 계속 타겟 찾기
+            float distance = Vector2.Distance(transform.position, currentTarget.transform.position);
+            if (distance <= attackRange)
+            {
+                // 공격 범위 안이면 공격
+                if (Time.time >= lastAttackTime + attackSpeed)
+                {
+                    Attack();
+                    lastAttackTime = Time.time;
+                }
+            }
+            else
+            {
+                // 공격 범위 밖이면 이동
+                Move();
+            }
         }
         else
         {
-            // 타겟과의 거리 체크
-            float distance = Vector2.Distance(transform.position, currentTarget.transform.position);
-
-            if (distance > attackRange)
-            {
-                // 공격 범위보다 멀어지면 다시 이동
-                currentTarget = null;
-                Move();
-            }
-            else if (Time.time >= lastAttackTime + attackSpeed)
-            {
-                Attack();
-            }
+            // 타겟이 없으면 이동
+            Move();
         }
     }
 
     void Move()
     {
-        float direction = isEnemy ? -1 : 1;
-        transform.position += new Vector3(direction * moveSpeed * Time.deltaTime, 0, 0);
+        if (currentTarget == null)
+        {
+            // 타겟이 없을 때는 기지 방향으로 이동 (X축만)
+            float direction = isEnemy ? 1 : -1;
+            float targetX = isEnemy ? RIGHT_BASE_X : LEFT_BASE_X;
+
+            // 기지 위치를 넘어가지 않도록 체크
+            if ((isEnemy && transform.position.x < targetX) ||
+                (!isEnemy && transform.position.x > targetX))
+            {
+                transform.position += new Vector3(direction * moveSpeed * Time.deltaTime, 0, 0);
+            }
+        }
+        else
+        {
+            // 타겟이 있을 때도 X축으로만 이동
+            float direction = currentTarget.transform.position.x > transform.position.x ? 1 : -1;
+            transform.position += new Vector3(direction * moveSpeed * Time.deltaTime, 0, 0);
+        }
     }
 
     void FindTarget()
     {
-        // 공격 범위 내의 모든 콜라이더 검출
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange, targetLayers);
 
         float nearestDistance = float.MaxValue;
         GameObject nearestTarget = null;
-        GameObject nearestBase = null;
 
         foreach (Collider2D hit in hits)
         {
+            if (hit == null) continue;
+
             float distance = Vector2.Distance(transform.position, hit.transform.position);
 
             if (isEnemy)
             {
-                // 적 유닛의 경우
-                if (hit.CompareTag("PlayerUnit"))
+                if (hit.CompareTag("PlayerUnit") || hit.CompareTag("PlayerBase"))
                 {
-                    // 플레이어 유닛이 최우선
                     if (distance < nearestDistance)
                     {
                         nearestDistance = distance;
                         nearestTarget = hit.gameObject;
                     }
-                }
-                else if (hit.CompareTag("PlayerBase") && nearestTarget == null)
-                {
-                    // 플레이어 기지는 유닛이 없을 때만 타겟
-                    nearestBase = hit.gameObject;
                 }
             }
             else
             {
-                // 아군 유닛의 경우
-                if (hit.CompareTag("EnemyUnit"))
+                if (hit.CompareTag("EnemyUnit") || hit.CompareTag("EnemyBase"))
                 {
-                    // 적 유닛이 최우선
                     if (distance < nearestDistance)
                     {
                         nearestDistance = distance;
                         nearestTarget = hit.gameObject;
                     }
                 }
-                else if (hit.CompareTag("EnemyBase") && nearestTarget == null)
-                {
-                    // 적 기지는 유닛이 없을 때만 타겟
-                    nearestBase = hit.gameObject;
-                }
             }
         }
 
-        // 타겟 설정: 유닛이 있으면 유닛을, 없으면 기지를
-        currentTarget = nearestTarget != null ? nearestTarget : nearestBase;
+        currentTarget = nearestTarget;
     }
 
     void Attack()
     {
+        if (currentTarget == null) return;
+
         if (isAreaAttack)
         {
             // 범위 공격
             Collider2D[] hits = Physics2D.OverlapCircleAll(currentTarget.transform.position, areaRadius, targetLayers);
             foreach (Collider2D hit in hits)
             {
-                ApplyDamage(hit.gameObject);
+                if (hit.GetComponent<Unit>())
+                {
+                    hit.GetComponent<Unit>().TakeDamage(attackPower);
+                }
+                else if (hit.GetComponent<BaseHealth>())
+                {
+                    hit.GetComponent<BaseHealth>().TakeDamage(attackPower);
+                }
             }
         }
         else
         {
             // 단일 타겟 공격
-            ApplyDamage(currentTarget);
-        }
-
-        lastAttackTime = Time.time;
-    }
-
-    void ApplyDamage(GameObject target)
-    {
-        Unit enemyUnit = target.GetComponent<Unit>();
-        if (enemyUnit != null)
-        {
-            enemyUnit.TakeDamage(attackPower);
-        }
-
-        BaseHealth baseHealth = target.GetComponent<BaseHealth>();
-        if (baseHealth != null)
-        {
-            baseHealth.TakeDamage(attackPower);
+            if (currentTarget.GetComponent<Unit>())
+            {
+                currentTarget.GetComponent<Unit>().TakeDamage(attackPower);
+            }
+            else if (currentTarget.GetComponent<BaseHealth>())
+            {
+                currentTarget.GetComponent<BaseHealth>().TakeDamage(attackPower);
+            }
         }
     }
 
@@ -171,7 +184,6 @@ public class Unit : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // 공격 범위를 시각적으로 표시 (디버그용)
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -183,4 +195,4 @@ public class Unit : MonoBehaviour
             Gizmos.DrawWireSphere(currentTarget.transform.position, areaRadius);
         }
     }
-}
+} 
