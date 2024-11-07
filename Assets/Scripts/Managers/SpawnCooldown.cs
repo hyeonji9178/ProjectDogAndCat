@@ -3,42 +3,54 @@ using UnityEngine.UI;
 
 public class SpawnCooldown : MonoBehaviour
 {
-    public Image cooldownImage;      // 쿨타임을 보여줄 이미지
-    public float cooldownTime = 3f;  // 쿨타임 시간 (초)
+    public float cooldownTime = 3f;
+    public Image cooldownImage;
+    public GameObject cooldownUI;  // 쿨타임 UI 전체를 담을 변수 추가
 
-    private float currentCooldown;
-    private bool isCooldown = false;
+    private float cooldownTimer;
+    private bool isOnCooldown;
 
     void Start()
     {
-        // 처음에는 쿨타임 없음
-        cooldownImage.fillAmount = 0;
+        // 시작할 때 UI 숨기기
+        if (cooldownUI != null)
+        {
+            cooldownUI.SetActive(false);
+        }
     }
 
     void Update()
     {
-        if (isCooldown)
+        if (isOnCooldown)
         {
-            currentCooldown -= Time.deltaTime;
-            cooldownImage.fillAmount = currentCooldown / cooldownTime;
+            cooldownTimer -= Time.deltaTime;
+            cooldownImage.fillAmount = cooldownTimer / cooldownTime;
 
-            if (currentCooldown <= 0)
+            if (cooldownTimer <= 0)
             {
-                isCooldown = false;
-                cooldownImage.fillAmount = 0;
+                isOnCooldown = false;
+                // 쿨타임 끝나면 UI 숨기기
+                if (cooldownUI != null)
+                {
+                    cooldownUI.SetActive(false);
+                }
             }
         }
     }
 
     public void StartCooldown()
     {
-        currentCooldown = cooldownTime;
-        isCooldown = true;
-        cooldownImage.fillAmount = 1;
+        cooldownTimer = cooldownTime;
+        isOnCooldown = true;
+        // 쿨타임 시작할 때 UI 보이기
+        if (cooldownUI != null)
+        {
+            cooldownUI.SetActive(true);
+        }
     }
 
     public bool IsOnCooldown()
     {
-        return isCooldown;
+        return isOnCooldown;
     }
 }

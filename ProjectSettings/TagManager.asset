@@ -6,6 +6,9 @@ TagManager:
   tags:
   - MoneyAndHp
   - PlayerBase
+  - EnemyBase
+  - PlayerUnit
+  - EnemyUnit
   layers:
   - Default
   - TransparentFX
@@ -18,6 +21,7 @@ TagManager:
   - 
   - 
   - MoneyAndHp
+  - CoolDown
   - 
   - 
   - 
@@ -34,8 +38,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - 10
   - 
   - 
   - 

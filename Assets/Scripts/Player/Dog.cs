@@ -4,8 +4,7 @@ public class Dog : Unit
 {
     void Start()
     {
-        isEnemy = false;  // "나는 아군이야!" 라고 표시
+        isEnemy = false;  // 아군 설정
         Initialize(transform.position);
     }
 }
-

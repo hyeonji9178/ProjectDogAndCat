@@ -20,6 +20,9 @@ public class CharacterShopSystem : MonoBehaviour
     public Button dog4Button;
     public Button dog5Button;
 
+    // 쿨타임 관련 추가
+    public SpawnCooldown[] spawnCooldowns;
+
     void Start()
     {
         // 버튼에 구매 함수 연결
@@ -38,22 +41,27 @@ public class CharacterShopSystem : MonoBehaviour
 
     void UpdateButtonStates()
     {
-        dog1Button.interactable = gameManager.money >= DOG1_PRICE;
-        dog2Button.interactable = gameManager.money >= DOG2_PRICE;
-        dog3Button.interactable = gameManager.money >= DOG3_PRICE;
-        dog4Button.interactable = gameManager.money >= DOG4_PRICE;
-        dog5Button.interactable = gameManager.money >= DOG5_PRICE;
+        // 돈과 쿨타임 모두 체크
+        dog1Button.interactable = gameManager.money >= DOG1_PRICE && !spawnCooldowns[0].IsOnCooldown();
+        dog2Button.interactable = gameManager.money >= DOG2_PRICE && !spawnCooldowns[1].IsOnCooldown();
+        dog3Button.interactable = gameManager.money >= DOG3_PRICE && !spawnCooldowns[2].IsOnCooldown();
+        dog4Button.interactable = gameManager.money >= DOG4_PRICE && !spawnCooldowns[3].IsOnCooldown();
+        dog5Button.interactable = gameManager.money >= DOG5_PRICE && !spawnCooldowns[4].IsOnCooldown();
     }
 
     void TryBuyCharacter(int characterIndex, int price)
     {
-        if (gameManager.money >= price)
+        // 쿨타임과 돈 체크
+        if (gameManager.money >= price && !spawnCooldowns[characterIndex].IsOnCooldown())
         {
             // 돈 차감
             gameManager.money -= price;
 
             // 캐릭터 생성
             prefabSpawner.SpawnPrefab(characterIndex);
+
+            // 쿨타임 시작
+            spawnCooldowns[characterIndex].StartCooldown();
         }
     }
 }
