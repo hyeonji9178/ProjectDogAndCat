@@ -21,6 +21,7 @@ public class UltimateSkill : MonoBehaviour
         // 버튼 초기 비활성화
         SetButtonState(false);
 
+
         // 1분 후 첫 사용 가능
         StartCoroutine(InitialCooldown());
     }
