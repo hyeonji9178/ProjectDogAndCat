@@ -16,15 +16,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - MoneyAndHp
-  - CoolDown
-  - 
-  - 
-  - 
+  - PlayerUnit
+  - EnemyUnit
+  - PlayerBase
+  - EnemyBase
   - 
   - 
   - 
@@ -38,7 +33,12 @@ TagManager:
   - 
   - 
   - 
-  - 10
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

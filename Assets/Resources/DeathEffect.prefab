@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6096648150065569687}
   - component: {fileID: 7407769482792946995}
   m_Layer: 0
-  m_Name: Death
+  m_Name: DeathEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580de5bafc19bf44b87e86f932d0d875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  fadeSpeed: 2
+  moveSpeed: 10
+  fadeSpeed: 10
 --- !u!212 &7407769482792946995
 SpriteRenderer:
   m_ObjectHideFlags: 0

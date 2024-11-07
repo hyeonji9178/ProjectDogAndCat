@@ -4,10 +4,14 @@ using System.Collections;
 
 public class UltimateSkill : MonoBehaviour
 {
+    [Header("UI Settings")]
     public Button ultimateButton;        // 필살기 버튼
     public float cooldownTime = 60f;     // 쿨타임 (1분)
     public float initialDelay = 60f;     // 게임 시작 후 첫 사용 가능 시간
-    public int ultimateDamage = 100000;  // 필살기 데미지
+
+    [Header("Skill Settings")]
+    public int ultimateDamage = 100;     // 필살기 데미지
+    public LayerMask enemyLayer;         // 적 레이어 마스크
 
     private bool isReady = false;        // 사용 가능 여부
     private Image buttonImage;           // 버튼 이미지
@@ -15,26 +19,35 @@ public class UltimateSkill : MonoBehaviour
 
     void Start()
     {
+        // 버튼 이미지 초기화
         buttonImage = ultimateButton.GetComponent<Image>();
         originalColor = buttonImage.color;
+
+        // 버튼에 클릭 이벤트 추가
+        ultimateButton.onClick.AddListener(UseUltimate);
 
         // 버튼 초기 비활성화
         SetButtonState(false);
 
-
-        // 1분 후 첫 사용 가능
+        // 초기 쿨타임 시작
         StartCoroutine(InitialCooldown());
+
+        Debug.Log("필살기 초기화 완료");
     }
 
     IEnumerator InitialCooldown()
     {
+        Debug.Log("초기 쿨타임 시작");
         yield return new WaitForSeconds(initialDelay);
+        Debug.Log("초기 쿨타임 종료, 버튼 활성화");
         SetButtonState(true);
     }
 
     public void UseUltimate()
     {
         if (!isReady) return;
+
+        Debug.Log("필살기 사용!");
 
         // 필살기 효과 실행
         ApplyUltimateDamage();
@@ -46,19 +59,23 @@ public class UltimateSkill : MonoBehaviour
 
     void ApplyUltimateDamage()
     {
-        // 맵 중앙(0,0)부터 아군 기지(x:50)까지의 모든 적 찾기
-        Collider2D[] hits = Physics2D.OverlapAreaAll(
-            new Vector2(0, -50),     // 왼쪽 아래 지점
-            new Vector2(50, 50)      // 오른쪽 위 지점
+        // 맵의 오른쪽 절반에 있는 모든 적 찾기
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            new Vector2(25, 0),          // 중심점 (0~50의 중간)
+            new Vector2(50, 100),        // 범위 크기 (가로 50, 세로 100)
+            0,                           // 회전 각도
+            enemyLayer                   // EnemyUnit 레이어만
         );
+
+        Debug.Log($"감지된 적 수: {hits.Length}");
 
         foreach (Collider2D hit in hits)
         {
-            // Enemy 컴포넌트를 가진 오브젝트만 데미지
-            Enemy enemy = hit.GetComponent<Enemy>();
-            if (enemy != null)
+            Unit unit = hit.GetComponent<Unit>();
+            if (unit != null && unit.isEnemy)
             {
-                enemy.TakeDamage(ultimateDamage);
+                Debug.Log($"{hit.name}에게 {ultimateDamage} 데미지!");
+                unit.TakeDamage(ultimateDamage);
             }
         }
     }
@@ -76,9 +93,12 @@ public class UltimateSkill : MonoBehaviour
         SetButtonState(true);
     }
 
-    // 필살기 사용 가능 여부 확인 (레벨업 시스템에서 사용)
-    public bool IsUltimateReady()
+    void OnDrawGizmosSelected()
     {
-        return isReady;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(
+            new Vector3(25, 0, 0),           // 중심점
+            new Vector3(50, 100, 0)          // 크기
+        );
     }
 }

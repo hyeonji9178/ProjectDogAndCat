@@ -14,7 +14,7 @@ public class Unit : MonoBehaviour
     public float attackRange = 2f;    // 공격 사정거리
     public bool isAreaAttack = false; // true면 범위공격, false면 단일공격
     public float areaRadius = 1f;     // 범위공격시 범위
-    
+
     [Header("Current Status")]
     public int currentHealth;
     private float lastAttackTime;
@@ -44,12 +44,13 @@ public class Unit : MonoBehaviour
     {
         // 1. 먼저 타겟 찾기
         FindTarget();
-        
+
         // 2. 타겟이 있고 공격 범위 안에 있으면 공격
         if (currentTarget != null)
         {
-            float distance = Vector2.Distance(transform.position, currentTarget.transform.position);
-            if (distance <= attackRange)
+            // X축 거리만으로 판단하도록 수정
+            float distanceX = Mathf.Abs(currentTarget.transform.position.x - transform.position.x);
+            if (distanceX <= attackRange)
             {
                 // 공격 범위 안이면 공격
                 if (Time.time >= lastAttackTime + attackSpeed)
@@ -78,9 +79,9 @@ public class Unit : MonoBehaviour
             // 타겟이 없을 때는 기지 방향으로 이동 (X축만)
             float direction = isEnemy ? 1 : -1;
             float targetX = isEnemy ? RIGHT_BASE_X : LEFT_BASE_X;
-            
+
             // 기지 위치를 넘어가지 않도록 체크
-            if ((isEnemy && transform.position.x < targetX) || 
+            if ((isEnemy && transform.position.x < targetX) ||
                 (!isEnemy && transform.position.x > targetX))
             {
                 transform.position += new Vector3(direction * moveSpeed * Time.deltaTime, 0, 0);
@@ -96,24 +97,29 @@ public class Unit : MonoBehaviour
 
     void FindTarget()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange, targetLayers);
-        
+        // Y축으로 더 큰 타원형 범위 생성
+        Vector2 boxSize = new Vector2(attackRange * 2, attackRange * 4);  // Y축을 2배 더 크게
+        Vector2 boxCenter = (Vector2)transform.position;
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(boxCenter, boxSize, 0f, targetLayers);
+
         float nearestDistance = float.MaxValue;
         GameObject nearestTarget = null;
 
         foreach (Collider2D hit in hits)
         {
             if (hit == null) continue;
-            
-            float distance = Vector2.Distance(transform.position, hit.transform.position);
-            
+
+            // X축 거리만으로 판단
+            float distanceX = Mathf.Abs(hit.transform.position.x - transform.position.x);
+
             if (isEnemy)
             {
                 if (hit.CompareTag("PlayerUnit") || hit.CompareTag("PlayerBase"))
                 {
-                    if (distance < nearestDistance)
+                    if (distanceX < nearestDistance)
                     {
-                        nearestDistance = distance;
+                        nearestDistance = distanceX;
                         nearestTarget = hit.gameObject;
                     }
                 }
@@ -122,9 +128,9 @@ public class Unit : MonoBehaviour
             {
                 if (hit.CompareTag("EnemyUnit") || hit.CompareTag("EnemyBase"))
                 {
-                    if (distance < nearestDistance)
+                    if (distanceX < nearestDistance)
                     {
-                        nearestDistance = distance;
+                        nearestDistance = distanceX;
                         nearestTarget = hit.gameObject;
                     }
                 }
@@ -179,16 +185,22 @@ public class Unit : MonoBehaviour
 
     void Die()
     {
-        GameObject effect = Instantiate(Resources.Load<GameObject>("DeathEffect"), transform.position, Quaternion.identity);
-        Destroy(effect, 1f);
+        GameObject effectPrefab = Resources.Load<GameObject>("DeathEffect");
+        if (effectPrefab != null)
+        {
+            GameObject effect = Instantiate(effectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect, 1f);
+        }
         Destroy(gameObject);
     }
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        
+        // 공격 범위를 박스로 표시
+        Vector2 boxSize = new Vector2(attackRange * 2, attackRange * 4);
+        Gizmos.DrawWireCube(transform.position, boxSize);
+
         if (isAreaAttack && currentTarget != null)
         {
             Gizmos.color = Color.yellow;
