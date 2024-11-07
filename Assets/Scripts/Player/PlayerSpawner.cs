@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-using UnityEngine;
-using UnityEngine.UI; // UI 사용을 위해 필요
 
 public class PlayerSpawner : MonoBehaviour
 {
