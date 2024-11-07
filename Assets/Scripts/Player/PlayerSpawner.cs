@@ -4,27 +4,38 @@ using UnityEngine.UI;
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject[] prefabs;
-    public Button[] spawnButtons; // 5개의 버튼을 연결할 배열
+    public Button[] spawnButtons;
+    public SpawnCooldown[] spawnCooldowns;
 
     private void Start()
     {
-        // 각 버튼에 클릭 이벤트 연결
         for (int i = 0; i < spawnButtons.Length; i++)
         {
-            int index = i; // 클로저 문제를 피하기 위해 지역 변수 사용
-            spawnButtons[i].onClick.AddListener(() => SpawnPrefab(index));
+            int index = i;
+            spawnButtons[i].onClick.AddListener(() => TrySpawnPrefab(index));
         }
     }
 
+    // CharacterShopSystem에서 호출하는 메서드
     public void SpawnPrefab(int index)
     {
-        // x는 50, y는 0에서 -20 사이 랜덤값
+        TrySpawnPrefab(index);
+    }
+
+    public void TrySpawnPrefab(int index)
+    {
+        if (spawnCooldowns[index].IsOnCooldown())
+        {
+            return;
+        }
+
         float randomY = Random.Range(-20f, 0f);
         Vector3 spawnPosition = new Vector3(50f, randomY, 0f);
 
         if (index >= 0 && index < prefabs.Length)
         {
             Instantiate(prefabs[index], spawnPosition, Quaternion.identity);
+            spawnCooldowns[index].StartCooldown();
         }
         else
         {
