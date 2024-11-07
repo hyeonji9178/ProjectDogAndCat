@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6299569329725328934}
   - component: {fileID: 5046860681153367232}
   - component: {fileID: 6976152465995100150}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy3
   m_TagString: EnemyUnit
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.0001, y: 0.0001}
+  m_Size: {x: 5, y: 6}
   m_EdgeRadius: 0
 --- !u!114 &6976152465995100150
 MonoBehaviour:
@@ -183,4 +183,4 @@ MonoBehaviour:
   currentHealth: 0
   targetLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 320

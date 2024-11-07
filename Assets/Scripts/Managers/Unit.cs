@@ -14,7 +14,7 @@ public class Unit : MonoBehaviour
     public float attackRange = 2f;    // 공격 사정거리
     public bool isAreaAttack = false; // true면 범위공격, false면 단일공격
     public float areaRadius = 1f;     // 범위공격시 범위
-
+    
     [Header("Current Status")]
     public int currentHealth;
     private float lastAttackTime;
@@ -44,7 +44,7 @@ public class Unit : MonoBehaviour
     {
         // 1. 먼저 타겟 찾기
         FindTarget();
-
+        
         // 2. 타겟이 있고 공격 범위 안에 있으면 공격
         if (currentTarget != null)
         {
@@ -78,9 +78,9 @@ public class Unit : MonoBehaviour
             // 타겟이 없을 때는 기지 방향으로 이동 (X축만)
             float direction = isEnemy ? 1 : -1;
             float targetX = isEnemy ? RIGHT_BASE_X : LEFT_BASE_X;
-
+            
             // 기지 위치를 넘어가지 않도록 체크
-            if ((isEnemy && transform.position.x < targetX) ||
+            if ((isEnemy && transform.position.x < targetX) || 
                 (!isEnemy && transform.position.x > targetX))
             {
                 transform.position += new Vector3(direction * moveSpeed * Time.deltaTime, 0, 0);
@@ -97,16 +97,16 @@ public class Unit : MonoBehaviour
     void FindTarget()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange, targetLayers);
-
+        
         float nearestDistance = float.MaxValue;
         GameObject nearestTarget = null;
 
         foreach (Collider2D hit in hits)
         {
             if (hit == null) continue;
-
+            
             float distance = Vector2.Distance(transform.position, hit.transform.position);
-
+            
             if (isEnemy)
             {
                 if (hit.CompareTag("PlayerUnit") || hit.CompareTag("PlayerBase"))
@@ -188,11 +188,11 @@ public class Unit : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-
+        
         if (isAreaAttack && currentTarget != null)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(currentTarget.transform.position, areaRadius);
         }
     }
-} 
+}

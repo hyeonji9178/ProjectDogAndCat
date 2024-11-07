@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2365371393903022132}
   - component: {fileID: 667816785836354289}
   - component: {fileID: 3269579893622075512}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dog 2
   m_TagString: PlayerUnit
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5, y: 6}
   m_EdgeRadius: 0
 --- !u!212 &2365371393903022132
 SpriteRenderer:
@@ -183,4 +183,4 @@ MonoBehaviour:
   currentHealth: 0
   targetLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 640
