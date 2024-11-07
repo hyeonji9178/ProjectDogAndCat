@@ -8,3 +8,4 @@ public class Dog : Unit
         Initialize(transform.position);
     }
 }
+
