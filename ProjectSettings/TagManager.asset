@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - MoneyAndHp
+  - PlayerBase
   layers:
   - Default
   - TransparentFX
