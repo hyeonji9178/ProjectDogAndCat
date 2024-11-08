@@ -3,19 +3,24 @@ using UnityEngine.UI;
 
 public class SpawnCooldown : MonoBehaviour
 {
+    [Header("Cooldown Settings")]
     public float cooldownTime = 3f;
+    public bool canSpawn = true;
+
+    [Header("UI References")]
     public Image cooldownImage;
-    public GameObject cooldownUI;  // 쿨타임 UI 전체를 담을 변수 추가
+    public GameObject cooldownUI;
 
     private float cooldownTimer;
-    private bool isOnCooldown;
+    public bool isOnCooldown;
+
+
 
     void Start()
     {
-        // 시작할 때 UI 숨기기
-        if (cooldownUI != null)
+        if (cooldownImage != null)
         {
-            cooldownUI.SetActive(false);
+            cooldownImage.fillAmount = 0;
         }
     }
 
@@ -24,15 +29,19 @@ public class SpawnCooldown : MonoBehaviour
         if (isOnCooldown)
         {
             cooldownTimer -= Time.deltaTime;
-            cooldownImage.fillAmount = cooldownTimer / cooldownTime;
+            if (cooldownImage != null)
+            {
+
+                cooldownImage.fillAmount = (cooldownTimer / cooldownTime);
+                Debug.Log($"Fill Amount: {cooldownImage.fillAmount}"); // 디버그용
+            }
 
             if (cooldownTimer <= 0)
             {
                 isOnCooldown = false;
-                // 쿨타임 끝나면 UI 숨기기
-                if (cooldownUI != null)
+                if (cooldownImage != null)
                 {
-                    cooldownUI.SetActive(false);
+                    cooldownImage.fillAmount = 0;
                 }
             }
         }
@@ -40,12 +49,15 @@ public class SpawnCooldown : MonoBehaviour
 
     public void StartCooldown()
     {
+        Debug.Log("starcooldown 접근");
+        if (canSpawn) return;
+        Debug.Log("starcooldown 내부");
         cooldownTimer = cooldownTime;
-        isOnCooldown = true;
-        // 쿨타임 시작할 때 UI 보이기
-        if (cooldownUI != null)
+
+
+        if (cooldownImage != null)
         {
-            cooldownUI.SetActive(true);
+            cooldownImage.fillAmount = 1;
         }
     }
 
